@@ -1,0 +1,72 @@
+[
+    {
+        "tipo": "Libro",
+        "titulo": "anonimom",
+        "autor": "sdfhgs",
+        "genero": "h",
+        "valoracion": "10"
+    },
+    {
+        "tipo": "Libro",
+        "titulo": "cien a\u00f1os de soledad",
+        "autor": "julio verne",
+        "genero": "ciencia ficcion",
+        "valoracion": "8.9"
+    },
+    {
+        "tipo": "Libro",
+        "titulo": "volar",
+        "autor": "wellerman",
+        "genero": "filosofo",
+        "valoracion": "9.5"
+    },
+    {
+        "tipo": "Pel\u00edcula",
+        "titulo": "odio navidad",
+        "autor": "nick",
+        "genero": "caricatura",
+        "valoracion": "7"
+    },
+    {
+        "tipo": "Pel\u00edcula",
+        "titulo": "jurasick parck",
+        "autor": "byron",
+        "genero": "ciencia ficcion",
+        "valoracion": "10"
+    },
+    {
+        "tipo": "M\u00fasica",
+        "titulo": "ahogandome en alcohol",
+        "autor": "lefty sm",
+        "genero": "rap",
+        "valoracion": "9"
+    },
+    {
+        "tipo": "Libro",
+        "titulo": "cien a\u00f1os de soledad",
+        "autor": "miguel garcia",
+        "genero": "novela",
+        "valoracion": "10"
+    },
+    {
+        "tipo": "Libro",
+        "titulo": "volar",
+        "autor": "miguel garcia",
+        "genero": "ficcion",
+        "valoracion": "8"
+    },
+    {
+        "tipo": "Pel\u00edcula",
+        "titulo": "jurassic parck",
+        "autor": "nick",
+        "genero": "ficcion",
+        "valoracion": ""
+    },
+    {
+        "tipo": "M\u00fasica",
+        "titulo": "sufrir es crecer",
+        "autor": "she",
+        "genero": "rap",
+        "valoracion": "10"
+    }
+]
