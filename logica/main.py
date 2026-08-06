@@ -1,4 +1,4 @@
-from inventario import *
+from logica.inventario import *
 
 def mostrar_menu():
     menu = """    ===========================================
@@ -129,7 +129,8 @@ while True:
     opc = mostrar_menu()
     if opc ==1 :
         sub_opc = menu_añadir_nuevo_elemento()
-        if sub_opc == 1:       
+        if sub_opc == 1:         
+
             Añadir(nombre_Archivo)
         elif opc ==2:
             agregar(nombre_Archivo)
