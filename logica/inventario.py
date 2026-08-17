@@ -1,40 +1,58 @@
 libros = [
     {
-      "titulo": "cien años de soledad",
-      "autor": "Gabriel Garcia Marquez",
-      "genero": "realismo magico"
-      
-  },
-  {
-      "titulo":"crimen y castigo",
-      "autor":"Fiódor Dostoievski",
-      "genero":"novela psicologica"
-  }
-]
-musica = [
+        "id": 1,
+        "tipo": "Libro",
+        "titulo": "Cien años de soledad",
+        "autor": "Gabriel García Márquez",
+        "genero": "Realismo mágico",
+        "valoracion": 9.5
+    },
     {
-      "titulo": "sufrir es crecer",
-      "autor": "she",
-      "genero": "rap "
-      
-  },
-  {
-      "titulo": "lose your self",
-      "autor":"eminem",
-      "genero":"rap"
-  }
-]
-peliculas = [
-    {
-      "titulo": "soledad",
-      "autor": "Gabriel ",
-      "genero": "ciencia ficcion"
-      
-  },
-  {
-      "titulo":"volver a nacer",
-      "autor":"hendrik",
-      "genero":"dramatico"
-  }
+        "id": 2,
+        "tipo": "Libro",
+        "titulo": "Crimen y castigo",
+        "autor": "Fiódor Dostoievski",
+        "genero": "Novela psicológica",
+        "valoracion": 9.2
+    }
 ]
 
+
+musica = [
+    {
+        "id": 3,
+        "tipo": "Música",
+        "titulo": "Sufrir es crecer",
+        "autor": "She",
+        "genero": "Rap",
+        "valoracion": 8.5
+    },
+    {
+        "id": 4,
+        "tipo": "Música",
+        "titulo": "Lose Yourself",
+        "autor": "Eminem",
+        "genero": "Rap",
+        "valoracion": 9.8
+    }
+]
+
+
+peliculas = [
+    {
+        "id": 5,
+        "tipo": "Película",
+        "titulo": "Soledad",
+        "autor": "Gabriel",
+        "genero": "Ciencia ficción",
+        "valoracion": 8.0
+    },
+    {
+        "id": 6,
+        "tipo": "Película",
+        "titulo": "Volver a nacer",
+        "autor": "Hendrik",
+        "genero": "Dramático",
+        "valoracion": 8.7
+    }
+]

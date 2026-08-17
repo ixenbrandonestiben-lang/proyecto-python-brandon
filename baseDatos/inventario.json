@@ -1,72 +1,51 @@
+
 [
     {
+        "id": 1,
         "tipo": "Libro",
-        "titulo": "anonimom",
-        "autor": "sdfhgs",
-        "genero": "h",
-        "valoracion": "10"
+        "titulo": "Cien años de soledad",
+        "autor": "Gabriel García Márquez",
+        "genero": "Realismo mágico",
+        "valoracion": 9.5
     },
     {
+        "id": 2,
         "tipo": "Libro",
-        "titulo": "cien a\u00f1os de soledad",
-        "autor": "julio verne",
-        "genero": "ciencia ficcion",
-        "valoracion": "8.9"
+        "titulo": "Crimen y castigo",
+        "autor": "Fiódor Dostoievski",
+        "genero": "Novela psicológica",
+        "valoracion": 9.2
     },
     {
-        "tipo": "Libro",
-        "titulo": "volar",
-        "autor": "wellerman",
-        "genero": "filosofo",
-        "valoracion": "9.5"
+        "id": 3,
+        "tipo": "Música",
+        "titulo": "Sufrir es crecer",
+        "autor": "She",
+        "genero": "Rap",
+        "valoracion": 8.5
     },
     {
-        "tipo": "Pel\u00edcula",
-        "titulo": "odio navidad",
-        "autor": "nick",
-        "genero": "caricatura",
-        "valoracion": "7"
+        "id": 4,
+        "tipo": "Música",
+        "titulo": "Lose Yourself",
+        "autor": "Eminem",
+        "genero": "Rap",
+        "valoracion": 9.8
     },
     {
-        "tipo": "Pel\u00edcula",
-        "titulo": "jurasick parck",
-        "autor": "byron",
-        "genero": "ciencia ficcion",
-        "valoracion": "10"
+        "id": 5,
+        "tipo": "Película",
+        "titulo": "Soledad",
+        "autor": "Gabriel",
+        "genero": "Ciencia ficción",
+        "valoracion": 8.0
     },
     {
-        "tipo": "M\u00fasica",
-        "titulo": "ahogandome en alcohol",
-        "autor": "lefty sm",
-        "genero": "rap",
-        "valoracion": "9"
-    },
-    {
-        "tipo": "Libro",
-        "titulo": "cien a\u00f1os de soledad",
-        "autor": "miguel garcia",
-        "genero": "novela",
-        "valoracion": "10"
-    },
-    {
-        "tipo": "Libro",
-        "titulo": "volar",
-        "autor": "miguel garcia",
-        "genero": "ficcion",
-        "valoracion": "8"
-    },
-    {
-        "tipo": "Pel\u00edcula",
-        "titulo": "jurassic parck",
-        "autor": "nick",
-        "genero": "ficcion",
-        "valoracion": ""
-    },
-    {
-        "tipo": "M\u00fasica",
-        "titulo": "sufrir es crecer",
-        "autor": "she",
-        "genero": "rap",
-        "valoracion": "10"
+        "id": 6,
+        "tipo": "Película",
+        "titulo": "Volver a nacer",
+        "autor": "Hendrik",
+        "genero": "Dramático",
+        "valoracion": 8.7
     }
 ]
