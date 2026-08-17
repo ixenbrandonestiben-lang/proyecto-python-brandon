@@ -6,17 +6,17 @@ import os
 # CONFIGURACIÓN
 # ============================================================
 
-NOMBRE_ARCHIVO = "Libreria.json"
+NOMBRE_ARCHIVO = "inventario.json"
 
 
 # ============================================================
-# FUNCIONES PARA MANEJAR EL ARCHIVO JSON
+# MANEJO DEL ARCHIVO JSON
 # ============================================================
 
 def cargar_coleccion():
     """
-    Carga la colección desde el archivo JSON.
-    Si el archivo no existe, devuelve una lista vacía.
+    Carga los elementos almacenados en inventario.json.
+    Si el archivo no existe, devuelve una colección vacía.
     """
 
     if not os.path.exists(NOMBRE_ARCHIVO):
@@ -29,21 +29,21 @@ def cargar_coleccion():
             if isinstance(datos, list):
                 return datos
 
-            print("Error: el archivo JSON no contiene una colección válida.")
+            print("Error: el archivo no contiene una colección válida.")
             return []
 
     except json.JSONDecodeError:
-        print("Error: el archivo JSON está dañado o tiene un formato incorrecto.")
+        print("Error: inventario.json tiene un formato incorrecto.")
         return []
 
     except OSError as error:
-        print(f"Error al abrir el archivo: {error}")
+        print(f"Error al cargar el archivo: {error}")
         return []
 
 
 def guardar_coleccion(coleccion):
     """
-    Guarda la colección actual en el archivo JSON.
+    Guarda toda la colección en inventario.json.
     """
 
     try:
@@ -62,12 +62,12 @@ def guardar_coleccion(coleccion):
 
 
 # ============================================================
-# FUNCIONES DE VALIDACIÓN
+# VALIDACIÓN DE DATOS
 # ============================================================
 
 def pedir_opcion(mensaje, minimo, maximo):
     """
-    Solicita una opción numérica dentro de un rango válido.
+    Solicita una opción numérica dentro de un rango.
     """
 
     while True:
@@ -77,7 +77,10 @@ def pedir_opcion(mensaje, minimo, maximo):
             if minimo <= opcion <= maximo:
                 return opcion
 
-            print(f"Error: debe ingresar un número entre {minimo} y {maximo}.")
+            print(
+                f"Error: ingrese un número entre "
+                f"{minimo} y {maximo}."
+            )
 
         except ValueError:
             print("Error: debe ingresar un número válido.")
@@ -104,7 +107,9 @@ def pedir_valoracion():
 
     while True:
         try:
-            valoracion = float(input("Ingrese la valoración (0-10): "))
+            valoracion = float(
+                input("Ingrese la valoración (0-10): ")
+            )
 
             if 0 <= valoracion <= 10:
                 return valoracion
@@ -117,17 +122,17 @@ def pedir_valoracion():
 
 def obtener_nuevo_id(coleccion):
     """
-    Genera un identificador único para el nuevo elemento.
+    Genera automáticamente un nuevo ID.
     """
 
     if not coleccion:
         return 1
 
-    ids = []
-
-    for elemento in coleccion:
-        if "id" in elemento:
-            ids.append(elemento["id"])
+    ids = [
+        elemento.get("id", 0)
+        for elemento in coleccion
+        if isinstance(elemento.get("id", 0), int)
+    ]
 
     if not ids:
         return 1
@@ -188,7 +193,7 @@ def menu_anadir_nuevo_elemento():
 
 
 # ============================================================
-# MENÚ VER ELEMENTOS
+# MENÚ VER
 # ============================================================
 
 def menu_ver_elementos():
@@ -288,7 +293,7 @@ def menu_eliminar_elemento():
 
 
 # ============================================================
-# MENÚ CATEGORÍAS
+# MENÚ CATEGORÍA
 # ============================================================
 
 def menu_ver_elementos_por_categoria():
@@ -342,7 +347,7 @@ def menu_guardar_cargar_coleccion():
 
 def anadir_elemento(coleccion, tipo):
     """
-    Crea un nuevo elemento y lo agrega a la colección.
+    Añade un libro, película o música.
     """
 
     print("\n===========================================")
@@ -350,10 +355,15 @@ def anadir_elemento(coleccion, tipo):
     print("===========================================")
 
     titulo = pedir_texto("Ingrese el título: ")
+
     autor = pedir_texto(
         "Ingrese el autor/director/artista: "
     )
-    genero = pedir_texto("Ingrese el género: ")
+
+    genero = pedir_texto(
+        "Ingrese el género: "
+    )
+
     valoracion = pedir_valoracion()
 
     nuevo_elemento = {
@@ -368,16 +378,37 @@ def anadir_elemento(coleccion, tipo):
     coleccion.append(nuevo_elemento)
 
     print("\nElemento añadido correctamente.")
-    print(f"Identificador asignado: {nuevo_elemento['id']}")
+    print(
+        f"Identificador asignado: "
+        f"{nuevo_elemento['id']}"
+    )
 
 
 # ============================================================
 # MOSTRAR ELEMENTOS
 # ============================================================
 
+def mostrar_elemento(elemento):
+    """
+    Muestra la información de un elemento.
+    """
+
+    print("-------------------------------------------")
+    print(f"ID:          {elemento.get('id', 'N/A')}")
+    print(f"Tipo:        {elemento.get('tipo', 'N/A')}")
+    print(f"Título:      {elemento.get('titulo', 'N/A')}")
+    print(f"Autor:       {elemento.get('autor', 'N/A')}")
+    print(f"Género:      {elemento.get('genero', 'N/A')}")
+    print(
+        f"Valoración:  "
+        f"{elemento.get('valoracion', 'N/A')}"
+    )
+
+
 def mostrar_elementos(coleccion, tipo=None):
     """
-    Muestra todos los elementos o los elementos de un tipo específico.
+    Muestra todos los elementos o solamente
+    los elementos de una categoría.
     """
 
     if tipo is None:
@@ -386,7 +417,8 @@ def mostrar_elementos(coleccion, tipo=None):
         elementos = [
             elemento
             for elemento in coleccion
-            if elemento.get("tipo", "").lower() == tipo.lower()
+            if elemento.get("tipo", "").lower()
+            == tipo.lower()
         ]
 
     if not elementos:
@@ -400,32 +432,40 @@ def mostrar_elementos(coleccion, tipo=None):
     for elemento in elementos:
         mostrar_elemento(elemento)
 
+    print("-------------------------------------------")
+    print(f"Total de elementos mostrados: {len(elementos)}")
 
-def mostrar_elemento(elemento):
-    """
-    Muestra la información de un elemento.
-    """
+
+# ============================================================
+# BÚSQUEDAS
+# ============================================================
+
+def mostrar_resultados_busqueda(resultados):
+    if not resultados:
+        print("\nNo se encontraron elementos.")
+        return
+
+    print(
+        f"\nSe encontraron "
+        f"{len(resultados)} elemento(s)."
+    )
+
+    for elemento in resultados:
+        mostrar_elemento(elemento)
 
     print("-------------------------------------------")
-    print(f"ID:          {elemento.get('id', 'N/A')}")
-    print(f"Tipo:        {elemento.get('tipo', 'N/A')}")
-    print(f"Título:      {elemento.get('titulo', 'N/A')}")
-    print(f"Autor:       {elemento.get('autor', 'N/A')}")
-    print(f"Género:      {elemento.get('genero', 'N/A')}")
-    print(f"Valoración:  {elemento.get('valoracion', 'N/A')}")
 
-
-# ============================================================
-# BUSCAR ELEMENTOS
-# ============================================================
 
 def buscar_por_titulo(coleccion):
-    titulo = pedir_texto("Ingrese el título que desea buscar: ")
+    titulo = pedir_texto(
+        "Ingrese el título que desea buscar: "
+    )
 
     resultados = [
         elemento
         for elemento in coleccion
-        if titulo.lower() in elemento.get("titulo", "").lower()
+        if titulo.lower()
+        in elemento.get("titulo", "").lower()
     ]
 
     mostrar_resultados_busqueda(resultados)
@@ -433,39 +473,32 @@ def buscar_por_titulo(coleccion):
 
 def buscar_por_autor(coleccion):
     autor = pedir_texto(
-        "Ingrese el autor/director/artista que desea buscar: "
+        "Ingrese el autor/director/artista: "
     )
 
     resultados = [
         elemento
         for elemento in coleccion
-        if autor.lower() in elemento.get("autor", "").lower()
+        if autor.lower()
+        in elemento.get("autor", "").lower()
     ]
 
     mostrar_resultados_busqueda(resultados)
 
 
 def buscar_por_genero(coleccion):
-    genero = pedir_texto("Ingrese el género que desea buscar: ")
+    genero = pedir_texto(
+        "Ingrese el género que desea buscar: "
+    )
 
     resultados = [
         elemento
         for elemento in coleccion
-        if genero.lower() in elemento.get("genero", "").lower()
+        if genero.lower()
+        in elemento.get("genero", "").lower()
     ]
 
     mostrar_resultados_busqueda(resultados)
-
-
-def mostrar_resultados_busqueda(resultados):
-    if not resultados:
-        print("\nNo se encontraron elementos.")
-        return
-
-    print(f"\nSe encontraron {len(resultados)} elemento(s).")
-
-    for elemento in resultados:
-        mostrar_elemento(elemento)
 
 
 # ============================================================
@@ -473,6 +506,10 @@ def mostrar_resultados_busqueda(resultados):
 # ============================================================
 
 def buscar_por_id(coleccion, identificador):
+    """
+    Busca un elemento utilizando su ID.
+    """
+
     for elemento in coleccion:
         if elemento.get("id") == identificador:
             return elemento
@@ -491,89 +528,130 @@ def seleccionar_elemento_para_editar(coleccion):
 
     try:
         identificador = int(
-            input("Ingrese el ID del elemento que desea editar: ")
+            input(
+                "Ingrese el ID del elemento "
+                "que desea editar: "
+            )
         )
+
     except ValueError:
-        print("Error: debe ingresar un identificador numérico.")
+        print("Error: debe ingresar un ID numérico.")
         return None
 
-    elemento = buscar_por_id(coleccion, identificador)
+    elemento = buscar_por_id(
+        coleccion,
+        identificador
+    )
 
     if elemento is None:
-        print("\nNo se encontró ningún elemento con ese ID.")
+        print(
+            "\nNo se encontró ningún elemento "
+            "con ese ID."
+        )
         return None
+
+    print("\nElemento seleccionado:")
+    mostrar_elemento(elemento)
 
     return elemento
 
 
 def editar_titulo(coleccion):
-    elemento = seleccionar_elemento_para_editar(coleccion)
+    elemento = seleccionar_elemento_para_editar(
+        coleccion
+    )
 
     if elemento is None:
         return
 
-    nuevo_titulo = pedir_texto("Ingrese el nuevo título: ")
-    elemento["titulo"] = nuevo_titulo
+    elemento["titulo"] = pedir_texto(
+        "Ingrese el nuevo título: "
+    )
 
     print("\nTítulo actualizado correctamente.")
 
 
 def editar_autor(coleccion):
-    elemento = seleccionar_elemento_para_editar(coleccion)
+    elemento = seleccionar_elemento_para_editar(
+        coleccion
+    )
 
     if elemento is None:
         return
 
-    nuevo_autor = pedir_texto(
+    elemento["autor"] = pedir_texto(
         "Ingrese el nuevo autor/director/artista: "
     )
 
-    elemento["autor"] = nuevo_autor
-
-    print("\nAutor/director/artista actualizado correctamente.")
+    print(
+        "\nAutor/director/artista "
+        "actualizado correctamente."
+    )
 
 
 def editar_genero(coleccion):
-    elemento = seleccionar_elemento_para_editar(coleccion)
+    elemento = seleccionar_elemento_para_editar(
+        coleccion
+    )
 
     if elemento is None:
         return
 
-    nuevo_genero = pedir_texto("Ingrese el nuevo género: ")
-    elemento["genero"] = nuevo_genero
+    elemento["genero"] = pedir_texto(
+        "Ingrese el nuevo género: "
+    )
 
     print("\nGénero actualizado correctamente.")
 
 
 def editar_valoracion(coleccion):
-    elemento = seleccionar_elemento_para_editar(coleccion)
+    elemento = seleccionar_elemento_para_editar(
+        coleccion
+    )
 
     if elemento is None:
         return
 
-    nueva_valoracion = pedir_valoracion()
-    elemento["valoracion"] = nueva_valoracion
+    elemento["valoracion"] = pedir_valoracion()
 
-    print("\nValoración actualizada correctamente.")
+    print(
+        "\nValoración actualizada correctamente."
+    )
 
 
 # ============================================================
 # ELIMINAR ELEMENTOS
 # ============================================================
 
+def confirmar_eliminacion():
+    while True:
+        respuesta = input(
+            "¿Está seguro de eliminarlo? (s/n): "
+        ).strip().lower()
+
+        if respuesta in ("s", "n"):
+            return respuesta == "s"
+
+        print("Error: responda solamente s o n.")
+
+
 def eliminar_por_titulo(coleccion):
     titulo = pedir_texto(
-        "Ingrese el título del elemento que desea eliminar: "
+        "Ingrese el título que desea eliminar: "
     )
 
     resultados = [
         elemento
         for elemento in coleccion
-        if titulo.lower() in elemento.get("titulo", "").lower()
+        if titulo.lower()
+        in elemento.get("titulo", "").lower()
     ]
 
     if not resultados:
-        print("\nNo se encontró ningún elemento con ese título.")
+        print(
+            "\nNo se encontró ningún elemento "
+            "con ese título."
+        )
         return
 
     print("\nElementos encontrados:")
@@ -584,24 +662,28 @@ def eliminar_por_titulo(coleccion):
     try:
         identificador = int(
             input(
-                "\nIngrese el ID del elemento que desea eliminar: "
+                "\nIngrese el ID del elemento "
+                "que desea eliminar: "
             )
         )
+
     except ValueError:
-        print("Error: debe ingresar un identificador válido.")
+        print("Error: debe ingresar un ID válido.")
         return
 
-    elemento = buscar_por_id(coleccion, identificador)
+    elemento = buscar_por_id(
+        coleccion,
+        identificador
+    )
 
     if elemento is None:
-        print("\nNo se encontró un elemento con ese ID.")
+        print(
+            "\nNo se encontró un elemento "
+            "con ese ID."
+        )
         return
 
-    confirmar = input(
-        "¿Está seguro de eliminarlo? (s/n): "
-    ).lower().strip()
-
-    if confirmar == "s":
+    if confirmar_eliminacion():
         coleccion.remove(elemento)
         print("\nElemento eliminado correctamente.")
     else:
@@ -609,27 +691,38 @@ def eliminar_por_titulo(coleccion):
 
 
 def eliminar_por_id(coleccion):
+    if not coleccion:
+        print("\nLa colección está vacía.")
+        return
+
     try:
         identificador = int(
-            input("Ingrese el ID del elemento que desea eliminar: ")
+            input(
+                "Ingrese el ID del elemento "
+                "que desea eliminar: "
+            )
         )
+
     except ValueError:
-        print("Error: debe ingresar un identificador válido.")
+        print("Error: debe ingresar un ID válido.")
         return
 
-    elemento = buscar_por_id(coleccion, identificador)
+    elemento = buscar_por_id(
+        coleccion,
+        identificador
+    )
 
     if elemento is None:
-        print("\nNo se encontró ningún elemento con ese ID.")
+        print(
+            "\nNo se encontró ningún elemento "
+            "con ese ID."
+        )
         return
 
+    print("\nElemento seleccionado:")
     mostrar_elemento(elemento)
 
-    confirmar = input(
-        "\n¿Está seguro de eliminarlo? (s/n): "
-    ).lower().strip()
-
-    if confirmar == "s":
+    if confirmar_eliminacion():
         coleccion.remove(elemento)
         print("\nElemento eliminado correctamente.")
     else:
@@ -637,22 +730,26 @@ def eliminar_por_id(coleccion):
 
 
 # ============================================================
-# PROCESAR MENÚ PRINCIPAL
+# PROGRAMA PRINCIPAL
 # ============================================================
 
 def ejecutar_programa():
-    """
-    Función principal del programa.
-    """
 
     coleccion = cargar_coleccion()
+
+    print("\n===========================================")
+    print("     ADMINISTRADOR DE COLECCIONES")
+    print("===========================================")
+    print(
+        f"Elementos cargados: {len(coleccion)}"
+    )
 
     while True:
 
         opcion = mostrar_menu()
 
         # ----------------------------------------------------
-        # 1. AÑADIR
+        # OPCIÓN 1: AÑADIR
         # ----------------------------------------------------
 
         if opcion == 1:
@@ -660,28 +757,34 @@ def ejecutar_programa():
             sub_opcion = menu_anadir_nuevo_elemento()
 
             if sub_opcion == 1:
+
                 anadir_elemento(
                     coleccion,
                     "Libro"
                 )
 
             elif sub_opcion == 2:
+
                 anadir_elemento(
                     coleccion,
                     "Película"
                 )
 
             elif sub_opcion == 3:
+
                 anadir_elemento(
                     coleccion,
                     "Música"
                 )
 
             elif sub_opcion == 4:
-                print("\nVolviendo al menú principal.")
+
+                print(
+                    "\nVolviendo al menú principal."
+                )
 
         # ----------------------------------------------------
-        # 2. VER ELEMENTOS
+        # OPCIÓN 2: VER ELEMENTOS
         # ----------------------------------------------------
 
         elif opcion == 2:
@@ -689,28 +792,34 @@ def ejecutar_programa():
             sub_opcion = menu_ver_elementos()
 
             if sub_opcion == 1:
+
                 mostrar_elementos(
                     coleccion,
                     "Libro"
                 )
 
             elif sub_opcion == 2:
+
                 mostrar_elementos(
                     coleccion,
                     "Película"
                 )
 
             elif sub_opcion == 3:
+
                 mostrar_elementos(
                     coleccion,
                     "Música"
                 )
 
             elif sub_opcion == 4:
-                print("\nVolviendo al menú principal.")
+
+                print(
+                    "\nVolviendo al menú principal."
+                )
 
         # ----------------------------------------------------
-        # 3. BUSCAR
+        # OPCIÓN 3: BUSCAR
         # ----------------------------------------------------
 
         elif opcion == 3:
@@ -718,19 +827,31 @@ def ejecutar_programa():
             sub_opcion = menu_buscar_elemento()
 
             if sub_opcion == 1:
-                buscar_por_titulo(coleccion)
+
+                buscar_por_titulo(
+                    coleccion
+                )
 
             elif sub_opcion == 2:
-                buscar_por_autor(coleccion)
+
+                buscar_por_autor(
+                    coleccion
+                )
 
             elif sub_opcion == 3:
-                buscar_por_genero(coleccion)
+
+                buscar_por_genero(
+                    coleccion
+                )
 
             elif sub_opcion == 4:
-                print("\nVolviendo al menú principal.")
+
+                print(
+                    "\nVolviendo al menú principal."
+                )
 
         # ----------------------------------------------------
-        # 4. EDITAR
+        # OPCIÓN 4: EDITAR
         # ----------------------------------------------------
 
         elif opcion == 4:
@@ -738,22 +859,37 @@ def ejecutar_programa():
             sub_opcion = menu_editar_elemento()
 
             if sub_opcion == 1:
-                editar_titulo(coleccion)
+
+                editar_titulo(
+                    coleccion
+                )
 
             elif sub_opcion == 2:
-                editar_autor(coleccion)
+
+                editar_autor(
+                    coleccion
+                )
 
             elif sub_opcion == 3:
-                editar_genero(coleccion)
+
+                editar_genero(
+                    coleccion
+                )
 
             elif sub_opcion == 4:
-                editar_valoracion(coleccion)
+
+                editar_valoracion(
+                    coleccion
+                )
 
             elif sub_opcion == 5:
-                print("\nVolviendo al menú principal.")
+
+                print(
+                    "\nVolviendo al menú principal."
+                )
 
         # ----------------------------------------------------
-        # 5. ELIMINAR
+        # OPCIÓN 5: ELIMINAR
         # ----------------------------------------------------
 
         elif opcion == 5:
@@ -761,76 +897,108 @@ def ejecutar_programa():
             sub_opcion = menu_eliminar_elemento()
 
             if sub_opcion == 1:
-                eliminar_por_titulo(coleccion)
+
+                eliminar_por_titulo(
+                    coleccion
+                )
 
             elif sub_opcion == 2:
-                eliminar_por_id(coleccion)
+
+                eliminar_por_id(
+                    coleccion
+                )
 
             elif sub_opcion == 3:
-                print("\nVolviendo al menú principal.")
+
+                print(
+                    "\nVolviendo al menú principal."
+                )
 
         # ----------------------------------------------------
-        # 6. VER POR CATEGORÍA
+        # OPCIÓN 6: CATEGORÍAS
         # ----------------------------------------------------
 
         elif opcion == 6:
 
-            sub_opcion = menu_ver_elementos_por_categoria()
+            sub_opcion = (
+                menu_ver_elementos_por_categoria()
+            )
 
             if sub_opcion == 1:
+
                 mostrar_elementos(
                     coleccion,
                     "Libro"
                 )
 
             elif sub_opcion == 2:
+
                 mostrar_elementos(
                     coleccion,
                     "Película"
                 )
 
             elif sub_opcion == 3:
+
                 mostrar_elementos(
                     coleccion,
                     "Música"
                 )
 
             elif sub_opcion == 4:
-                print("\nVolviendo al menú principal.")
+
+                print(
+                    "\nVolviendo al menú principal."
+                )
 
         # ----------------------------------------------------
-        # 7. GUARDAR / CARGAR
+        # OPCIÓN 7: GUARDAR / CARGAR
         # ----------------------------------------------------
 
         elif opcion == 7:
 
-            sub_opcion = menu_guardar_cargar_coleccion()
+            sub_opcion = (
+                menu_guardar_cargar_coleccion()
+            )
 
             if sub_opcion == 1:
-                guardar_coleccion(coleccion)
+
+                guardar_coleccion(
+                    coleccion
+                )
 
             elif sub_opcion == 2:
+
                 coleccion = cargar_coleccion()
 
-                print("\nColección cargada correctamente.")
                 print(
-                    f"Elementos cargados: {len(coleccion)}"
+                    "\nColección cargada correctamente."
+                )
+
+                print(
+                    f"Elementos cargados: "
+                    f"{len(coleccion)}"
                 )
 
             elif sub_opcion == 3:
-                print("\nVolviendo al menú principal.")
+
+                print(
+                    "\nVolviendo al menú principal."
+                )
 
         # ----------------------------------------------------
-        # 8. SALIR
+        # OPCIÓN 8: SALIR
         # ----------------------------------------------------
 
         elif opcion == 8:
 
             print("\n===========================================")
-            print("      FINALIZANDO EL PROGRAMA")
+            print("         FINALIZANDO EL PROGRAMA")
             print("===========================================")
 
-            guardar_coleccion(coleccion)
+            guardar_coleccion(
+                coleccion
+            )
 
             print("Saliendo del programa...")
             print("Vuelve pronto.")
@@ -839,7 +1007,7 @@ def ejecutar_programa():
 
 
 # ============================================================
-# INICIO DEL PROGRAMA
+# INICIO
 # ============================================================
 
 if __name__ == "__main__":
